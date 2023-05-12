@@ -29,7 +29,7 @@ from the path of any file in the project."""
     root_path = ""
     current = dirpath
     iterations = 0
-    while root_path == "":
+    while not root_path:
         if isfile(join(current, "conf.py")):
             root_path = current
         else:
@@ -46,8 +46,7 @@ def find_images(document):
     """Returns the list of image filepaths used by the `document`."""
     images = []
     for line in document:
-        match = re.match(r"\.\. image::\s+(img\/.+)", line)
-        if match:
+        if match := re.match(r"\.\. image::\s+(img\/.+)", line):
             images.append(match[1])
     return list(set(images))
 
@@ -93,7 +92,7 @@ def print_redirects(paths):
 
         in_path = join(in_directory, filename_html)
         out_path = join(out_path_relative, filename_html)
-        redirects += in_path + " -> " + out_path + "\n"
+        redirects += f"{in_path} -> {out_path}" + "\n"
     print(redirects)
 
 

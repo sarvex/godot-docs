@@ -47,20 +47,16 @@ class GDScriptLexer(RegexLexer):
     filenames = ["*.gd"]
     mimetypes = ["text/x-gdscript", "application/x-gdscript"]
 
-    def innerstring_rules(ttype):
+    def innerstring_rules(self):
         return [
-            # the old style '%s' % (...) string formatting
             (
                 r"%(\(\w+\))?[-#0 +]*([0-9]+|[*])?(\.([0-9]+|[*]))?"
                 "[hlL]?[E-GXc-giorsux%]",
                 String.Interpol,
             ),
-            # backslashes, quotes and formatting signs must be parsed one at a time
-            (r'[^\\\'"%\n]+', ttype),
-            (r'[\'"\\]', ttype),
-            # unhandled string formatting sign
-            (r"%", ttype),
-            # newlines are an error (use "nl" state)
+            (r'[^\\\'"%\n]+', self),
+            (r'[\'"\\]', self),
+            (r"%", self),
         ]
 
     tokens = {

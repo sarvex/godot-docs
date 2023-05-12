@@ -32,10 +32,7 @@ def parse_command_line_args():
 
 
 def dict_item_to_str(item):
-    s = ""
-    for key in item:
-        s += item[key]
-    return s
+    return "".join(item[key] for key in item)
 
 
 def main():
@@ -48,7 +45,7 @@ def main():
     args = parse_command_line_args()
     assert args.revision1 != args.revision2, "Revisions must be different."
     for revision in [args.revision1, args.revision2]:
-        assert not "/" in revision, "Revisions must be local branches only."
+        assert "/" not in revision, "Revisions must be local branches only."
 
     # Ensure that both revisions are present in the local repository.
     for revision in [args.revision1, args.revision2]:
@@ -88,14 +85,14 @@ def main():
         source = source.replace(".rst", ".html")
         destination = destination.replace(".rst", ".html")
         if not source.startswith("/"):
-            source = "/" + source
+            source = f"/{source}"
         if not destination.startswith("/"):
-            destination = "/" + destination
+            destination = f"/{destination}"
         csv_data.append(
             {"source": source, "destination": destination}
         )
 
-    if len(csv_data) < 1:
+    if not csv_data:
         print("No renames found for", args.revision1, "->", args.revision2)
         return
 

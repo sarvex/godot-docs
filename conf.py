@@ -91,7 +91,7 @@ release = version
 env_tags = os.getenv("SPHINX_TAGS")
 if env_tags is not None:
     for tag in env_tags.split(","):
-        print("Adding Sphinx tag: %s" % tag.strip())
+        print(f"Adding Sphinx tag: {tag.strip()}")
         tags.add(tag.strip())  # noqa: F821
 
 # Language / i18n
@@ -114,8 +114,8 @@ supported_languages = {
 }
 
 language = os.getenv("READTHEDOCS_LANGUAGE", "en")
-if not language in supported_languages.keys():
-    print("Unknown language: " + language)
+if language not in supported_languages:
+    print(f"Unknown language: {language}")
     print("Supported languages: " + ", ".join(supported_languages.keys()))
     print(
         "The configured language is either wrong, or it should be added to supported_languages in conf.py. Falling back to 'en'."
@@ -159,7 +159,7 @@ html_theme_options = {
     "display_version": False,
 }
 
-html_title = supported_languages[language] % ( "(" + version + ")" )
+html_title = supported_languages[language] % f"({version})"
 
 # VCS options: https://docs.readthedocs.io/en/latest/vcs.html#github
 html_context = {
@@ -281,7 +281,7 @@ sphinx.util.i18n.get_image_filename_for_language = godot_get_image_filename_for_
 # Similar story for the localized class reference, it's out of tree and there doesn't
 # seem to be an easy way for us to tweak the toctree to take this into account.
 # So we're deleting the existing class reference and adding a symlink instead...
-if is_i18n and os.path.exists("../classes/" + language):
+if is_i18n and os.path.exists(f"../classes/{language}"):
     import shutil
 
     if os.path.islink("classes"):  # Previously made symlink.
@@ -289,7 +289,7 @@ if is_i18n and os.path.exists("../classes/" + language):
     else:
         shutil.rmtree("classes")
 
-    os.symlink("../classes/" + language, "classes")
+    os.symlink(f"../classes/{language}", "classes")
 
 # Couldn't find a way to retrieve variables nor do advanced string
 # concat from reST, so had to hardcode this in the "epilog" added to
@@ -303,5 +303,5 @@ rst_epilog = """
     :height: 66
 """.format(
     image_locale="-" if language == "en" else language,
-    target_locale="" if language == "en" else "/" + language,
+    target_locale="" if language == "en" else f"/{language}",
 )

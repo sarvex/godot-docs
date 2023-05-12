@@ -103,7 +103,8 @@ def generate_description(app, pagename, templatename, context, doctree):
     doctree.walkabout(generator)
 
     description = (
-        '<meta name="description" content="' + generator.create_description() + '">\n'
+        f'<meta name="description" content="{generator.create_description()}'
+        + '">\n'
     )
 
     context["metatags"] += description
